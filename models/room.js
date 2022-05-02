@@ -1,10 +1,14 @@
 const mongoose=require('mongoose');
-const roomschema=mongoose.Schema({
+const roomSchema=mongoose.Schema({
     name:{
         type:String,
         required:true
     },
     maxcount:{
+        type:Number,
+        required:true
+    },
+    phonenumber:{
         type:Number,
         required:true
     },
@@ -22,8 +26,9 @@ const roomschema=mongoose.Schema({
         type:String,
         required:true
     }
-},{
+},
+{
     timestamps:true,
 })
-const roomModel=mongoose.model('rooms',roomschema)
-module.exports=roomModel
+const roomModel=mongoose.model('rooms',roomSchema)
+module.exports=roomModel;
