@@ -1,12 +1,10 @@
 import React from "react";
 
-function Error({ message }) {
+function Error(props) {
   return (
-    <div>
-      <div className="alert alert-danger" role="alert">
-        {message}
+      <div className={`alert alert-danger ${props.spaceM ? props.spaceM : null} ${props.spaceP ? props.spaceP : null}`} role="alert">
+        {props.message}
       </div>
-    </div>
   );
 }
 

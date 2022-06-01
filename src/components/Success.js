@@ -1,11 +1,9 @@
-import React from 'react';
+import React from "react";
 
-function Success({message}) {
+function Success({ message }) {
   return (
-      <div>
-    <div class="alert alert-success" role="alert">
-    {message}
-    </div>
+    <div className="alert alert-success" role="alert">
+      {message}
     </div>
   );
 }

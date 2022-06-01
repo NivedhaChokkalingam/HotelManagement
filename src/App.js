@@ -1,27 +1,72 @@
-import logo from "./logo.svg";
-import "./App.css";
 import Navbar from "./components/Navbar";
-import { BrowserRouter, Route, Link } from "react-router-dom";
-import Homescreen from "./Homescreen";
-import Bookingscreen from "./screens/Bookingscreen";
-import Registerscreen from "./screens/Registerscreen"
-import Loginscreen from "./screens/Loginscreen"
-import Profilescreen from "./screens/Profilescreen";
-import Adminscreen from "./screens/Adminscreen";
+import { Routes, Route } from "react-router-dom";
+import Registerscreen from "./pages/Registerscreen";
+import Loginscreen from "./pages/Loginscreen";
+
+// import Homescreen from "./pages/Homescreen";
+import Bookingscreen from "./pages/Bookingscreen";
+import Profilescreen from "./pages/Profilescreen";
+import Adminscreen from "./pages/Adminscreen";
+import Managerscreen from "./pages/Managerscreen";
+import OrderFood from "./pages/OrderFood";
+import Talkscreen from "./pages/Talkscreen";
+
+import Error from "./components/Error";
+import { Smooth } from "./context";
+import { useContext, Suspense, lazy } from "react";
+
+const Homescreen = lazy(() => import("./pages/Homescreen"));
+// const Bookingscreen = lazy(() => import("./pages/Bookingscreen"));
+// const Profilescreen = lazy(() => import("./pages/Profilescreen"));
+// const Adminscreen = lazy(() => import("./pages/Adminscreen"));
+// const Managerscreen = lazy(() => import("./pages/Managerscreen"));
+// const OrderFood = lazy(() => import("./pages/OrderFood"));
+// const Talkscreen = lazy(() => import("./pages/Talkscreen"));
 
 function App() {
+  const { data } = useContext(Smooth);
   return (
-    <div className="App">
+    <>
       <Navbar />
-      <BrowserRouter>
-        <Route path="/home" exact component={Homescreen} />
-        <Route path="/book/:roomid/:fromdate/:todate" exact component={Bookingscreen}/>
-        <Route path="/register" exact component={Registerscreen}/>
-        <Route path="/login" exact component={Loginscreen}/>
-        <Route path="/profile" exact component={Profilescreen}/>
-      <Route path="/admin" exact component={Adminscreen}/>
-      </BrowserRouter>
-    </div>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Routes>
+          <Route path="/" element={<Homescreen />} />
+          <Route path="/register" element={<Registerscreen />} />
+          <Route path="/login" element={<Loginscreen />} />
+
+          {data.metaInfo?.role === "user" && (
+            <>
+              <Route
+                path="/book/:roomid/:fromdate/:todate"
+                element={<Bookingscreen />}
+              />
+              <Route path="/profile" element={<Profilescreen />} />
+              <Route path="/orderfood" element={<OrderFood />} />
+              <Route path="/complaint" element={<Talkscreen />} />
+            </>
+          )}
+
+          {data.metaInfo?.role === "admin" && (
+            <>
+              <Route path="/admin" element={<Adminscreen />} />
+            </>
+          )}
+
+          {data.metaInfo?.role === "manager" && (
+            <>
+              <Route path="/orderfood" element={<OrderFood />} />
+              <Route path="/manager" element={<Managerscreen />} />
+            </>
+          )}
+          <Route
+            path="*"
+            element={
+              <Error message="Not found page" spaceM="mt-5" spaceP="py-5" />
+            }
+          />
+        </Routes>
+      </Suspense>
+    </>
   );
 }
 

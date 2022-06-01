@@ -1,78 +1,135 @@
-import React from "react";
+import React, { useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Smooth } from "../context";
 
 function Navbar() {
-  const user = JSON.parse(window.localStorage.getItem("currentUser"));
+  const navigate = useNavigate();
+  const { data, setData } = useContext(Smooth);
 
   function logout() {
-    localStorage.removeItem("currentUser");
-    window.location.href = "/login";
+    localStorage.clear();
+    setData((prev) => ({ ...prev, metaInfo: null }));
+    navigate("/login");
   }
   return (
-    <div>
-      <nav className="navbar navbar-expand-lg ">
-        <a className="navbar-brand" href="/home">
-          Pondicherry Hotel
-        </a>
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-toggle="collapse"
-          data-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span className="navbar-toggler-icon">
-            <i className="fa fa-bars" style={{ color: "white" }}></i>
-          </span>
-        </button>
+    <>
+      {/* our */}
+      <div>
+        <nav className="navbar navbar-expand-lg navbar-dark bg-dark ">
+          <Link to="/" className="navbar-brand mx-4">
+            Smooth Book Hotel
+          </Link>
 
-        <div className="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul className="navbar-nav mr-5">
-            {user ? (
-              <>
-                <div className="dropdown">
-                  <button
-                    className="btn btn-secondary dropdown-toggle"
-                    type="button"
-                    id="dropdownMenuButton"
-                    data-toggle="dropdown"
-                    aria-haspopup="true"
-                    aria-expanded="false"
+          <button
+            className="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span className="navbar-toggler-icon"></span>
+          </button>
+
+          <div className="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul className="navbar-nav" style={{ marginRight: "30px" }}>
+              {data.metaInfo ? (
+                <>
+                  <span
+                    style={{
+                      color: "white",
+                      padding: "4px 10px",
+                      fontSize: "16px",
+                    }}
                   >
-                    <i className="fa fa-user">/</i> {user.name}
-                  </button>
-                  <div
-                    className="dropdown-menu"
-                    aria-labelledby="dropdownMenuButton"
-                  >
-                    <a className="dropdown-item" href="/profile">
-                      Profile
-                    </a>
-                    <a className="dropdown-item" href="#" onClick={logout}>
-                      Logout
-                    </a>
+                    Welcome, {data.metaInfo?.name}
+                  </span>
+                  <div className="dropdown">
+                    <button
+                      className="btn dropdown-toggle"
+                      type="button"
+                      id="dropdownMenuButton1"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      App Setting&nbsp;&nbsp;&nbsp;&nbsp;
+                      <i className="fa-solid fa-gear"></i>&nbsp;&nbsp;
+                    </button>
+                    <ul
+                      className="dropdown-menu"
+                      aria-labelledby="dropdownMenuButton1"
+                    >
+                      {data.metaInfo?.role === "user" ? (
+                        <>
+                          <li>
+                            <Link className="dropdown-item" to="/profile">
+                              Profile
+                            </Link>
+                          </li>
+                          <li>
+                            <Link className="dropdown-item" to="/orderfood">
+                              Order Food
+                            </Link>
+                          </li>
+                          <li>
+                            <Link className="dropdown-item" to="/complaint">
+                              Complaint
+                            </Link>
+                          </li>
+                        </>
+                      ) : null}
+                      {data.metaInfo.role === "admin" ? (
+                        <>
+                          <li>
+                            <Link className="dropdown-item" to="/admin">
+                              Admin
+                            </Link>
+                          </li>
+                        </>
+                      ) : null}
+
+                      {data.metaInfo.role === "manager" ? (
+                        <>
+                          <li>
+                            <Link className="dropdown-item" to="/manager">
+                              Manager
+                            </Link>
+                          </li>
+                          <li>
+                            <Link className="dropdown-item" to="/orderfood">
+                              Order Food
+                            </Link>
+                          </li>
+                        </>
+                      ) : null}
+                      <li>
+                        <span className="dropdown-item" onClick={logout}>
+                          Logout
+                        </span>
+                      </li>
+                    </ul>
                   </div>
-                </div>
-              </>
-            ) : (
-              <>
-                <li className="nav-item active">
-                  <a className="nav-link" href="/register">
-                    Register
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="/login">
-                    Login
-                  </a>
-                </li>
-              </>
-            )}
-          </ul>
-        </div>
-      </nav>
-    </div>
+                </>
+              ) : (
+                <>
+                  <li className="nav-item active">
+                    <Link className="nav-link" to="/register">
+                      Register
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link className="nav-link" to="/login">
+                      Login
+                    </Link>
+                  </li>
+                </>
+              )}
+            </ul>
+          </div>
+        </nav>
+      </div>
+    </>
   );
 }
 
