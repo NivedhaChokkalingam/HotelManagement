@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
-var mongoURL =
-  "mongodb+srv://nivedha:nivedhavarun@cluster0.dwqdq.mongodb.net/pondirooms";
-mongoose.connect(mongoURL, { useUnifiedTopology: true, useNewUrlParser: true });
+const { DB_URL } = require("./config.js");
+mongoose.connect(DB_URL, { useUnifiedTopology: true, useNewUrlParser: true });
 var connection = mongoose.connection;
 connection.on("error", () => {
   console.log("Mongo DB Connecion failed");
@@ -9,4 +8,4 @@ connection.on("error", () => {
 connection.on("connected", () => {
   console.log("Mongo DB Connection Successful");
 });
-module.export = mongoose
+module.export = mongoose;

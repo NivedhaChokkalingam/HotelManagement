@@ -28,12 +28,29 @@ router.post("/login", async (req, res) => {
   }
 });
 
-router.get("/getallusers",async(req,res)=>{
+router.get("/getallusers", async (req, res) => {
   try {
-    const users=await User.find()
-    res.send(users)
+    const users = await User.find();
+    res.send(users);
   } catch (error) {
     return res.status(400).json({ error });
   }
-})
+});
+
+router.delete("/deleteuser/:id", async (req, res) => {
+  const id = req.params.id;
+  if (!id.match(/^[0-9a-fA-F]{24}$/))
+    return res.status(404).send({ message: "Not found" });
+
+  const food = await User.findOne({ _id: id });
+  if (!food) return res.status(404).send({ message: "Not found" });
+  try {
+    await User.deleteOne({ _id: id });
+    return res.status(200).send("Deleted Successfully");
+  } catch (error) {
+    return res
+      .status(400)
+      .send({ message: "Something happened try again later" });
+  }
+});
 module.exports = router;

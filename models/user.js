@@ -10,9 +10,9 @@ const userSchema=mongoose.Schema({
     password:{
         type:String,required:true
     },
-    isAdmin:
+    role:
     {
-        type:Boolean,default:false
+        type:String,default:"user"
     }
 },{
     timestamps:true,
