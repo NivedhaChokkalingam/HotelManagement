@@ -1,3 +1,3 @@
-# HotelManagement
-[Live stie](https://ezbook.netlify.app/)
+
+[Live site](https://ezbook.netlify.app/)
 
